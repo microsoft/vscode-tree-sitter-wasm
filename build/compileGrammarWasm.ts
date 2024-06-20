@@ -24,7 +24,7 @@ export async function ensureWasm(grammar: ITreeSitterGrammar, outputPath: string
 	await fs.promises.mkdir(outputPath, { recursive: true });
 
 	const treeSitterBinPath = path.join(PROJECT_ROOT, 'node_modules', '.bin', 'tree-sitter');
-	const command = `node ${treeSitterBinPath} build-wasm --docker ${folderPath}`;
+	const command = `node ${treeSitterBinPath} build --wasm --docker ${folderPath}`;
 	console.log(`Executing: ${command}`);
 	child_process.execSync(command, {
 		stdio: 'inherit',

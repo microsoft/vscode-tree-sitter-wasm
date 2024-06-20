@@ -11,7 +11,6 @@
     "@types/node": "^20.14.6",
     "tree-sitter-cli": "^0.22.6",
     "tree-sitter-typescript": "^0.21.1",
-    "ts-node": "^10.9.2",
-    "web-tree-sitter": "^0.22.2"
+    "ts-node": "^10.9.2"
   }
 }
