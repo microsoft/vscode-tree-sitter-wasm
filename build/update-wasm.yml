@@ -32,16 +32,7 @@ extends:
           - script: npm ci
             displayName: Install dependencies
 
-          - script: |
-              npm run build-wasm
-              echo $(Build.ArtifactStagingDirectory)
-              mv wasm $(Build.ArtifactStagingDirectory)
-              
-        templateContext:
-          outputs: 
-          - output: pipelineArtifact
-            path: $(Build.ArtifactStagingDirectory)/wasm
-            artifact: wasm
+          - script: npm run build-wasm
 
           # - script: npm --prefix=fs-provider ci
           #   displayName: Install dependencies (fs-provider)
