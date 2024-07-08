@@ -1,9 +1,26 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
 trigger:
   tags:
     include:
-    - wasm-prebuilds-*
+      - wasm-prebuilds-*
+      - main
 
 pr: none
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: microsoft/vscode-engineering
+      ref: main
+      endpoint: Monaco
+
+parameters:
+  - name: publishPackage
+    displayName: 🚀 Publish tree-sitter-wasm
+    type: boolean
+    default: false
 
 jobs:
 - job: build_wasm
@@ -15,3 +32,27 @@ jobs:
 
     - publish: $(Build.ArtifactStagingDirectory)/wasm
       artifact: wasm
+
+
+extends:
+  template: azure-pipelines/npm-package/pipeline.yml@templates
+  parameters:
+    npmPackages:
+      - name: tree-sitter-wasm
+
+        buildSteps:
+          - script: npm ci
+            displayName: Install dependencies
+
+          - script: |
+              npm run build-wasm
+              echo $(Build.ArtifactStagingDirectory)
+              mv wasm $(Build.ArtifactStagingDirectory)
+
+          - publish: $(Build.ArtifactStagingDirectory)/wasm
+            artifact: wasm
+
+          # - script: npm --prefix=fs-provider ci
+          #   displayName: Install dependencies (fs-provider)
+
+        publishPackage: ${{ parameters.publishPackage }}
