@@ -1,11 +1,11 @@
 {
-  "name": "vscode-tree-sitter-wasm",
+  "name": "@vscode/tree-sitter-wasm",
   "version": "1.0.0",
   "description": "Pre-built WASM files for Tree-Sitter and Tree-Sitter languages that VS Code uses",
   "scripts": {
     "build-wasm": "ts-node ./build/main.ts"
   },
-  "author": "",
+  "author": "Visual Studio Code Team",
   "license": "MIT",
   "files": [
     "wasm",
@@ -19,5 +19,12 @@
     "tree-sitter-cli": "^0.22.6",
     "tree-sitter-typescript": "^0.21.1",
     "ts-node": "^10.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-tree-sitter-wasm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Microsoft/vscode-tree-sitter-wasm/issues"
   }
 }
