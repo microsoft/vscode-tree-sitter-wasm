@@ -22,18 +22,6 @@ parameters:
     type: boolean
     default: false
 
-jobs:
-- job: build_wasm
-  steps:
-    - script: |
-        npm run build-wasm
-        echo $(Build.ArtifactStagingDirectory)
-        mv wasm $(Build.ArtifactStagingDirectory)
-
-    - publish: $(Build.ArtifactStagingDirectory)/wasm
-      artifact: wasm
-
-
 extends:
   template: azure-pipelines/npm-package/pipeline.yml@templates
   parameters:
