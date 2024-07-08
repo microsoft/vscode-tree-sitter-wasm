@@ -7,6 +7,13 @@
   },
   "author": "",
   "license": "MIT",
+  "files": [
+    "wasm",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md",
+    "cgmanifest.json"
+  ],
   "devDependencies": {
     "@types/node": "^20.14.6",
     "tree-sitter-cli": "^0.22.6",
