@@ -34,7 +34,4 @@ extends:
 
           - script: npm run build-wasm
 
-          # - script: npm --prefix=fs-provider ci
-          #   displayName: Install dependencies (fs-provider)
-
         publishPackage: ${{ parameters.publishPackage }}
