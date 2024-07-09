@@ -29,9 +29,19 @@ extends:
       - name: tree-sitter-wasm
 
         buildSteps:
+          - script: ./build/setup-emsdk.sh
+            displayName: Setup emsdk
+
+          - script: echo '##vso[task.prependpath]/opt/dev/emsdk/upstream/emscripten'
+            displayName: Setup emsdk path 1
+            
+          - script: echo '##vso[task.prependpath]/opt/dev/emsdk'
+            displayName: Setup emsdk path 2
+
           - script: npm ci
             displayName: Install dependencies
 
           - script: npm run build-wasm
+            displayName: Build all wasm
 
         publishPackage: ${{ parameters.publishPackage }}
