@@ -4,14 +4,18 @@ import * as path from 'path';
 
 export async function ensureTreeSitterWasm(repo: string, tag: string, clonePath: string, outputPath: string) {
     const repoSubpath = 'tree-sitter';
-    await fs.rmdirSync(path.join(clonePath, repoSubpath), { recursive: true });
+    try {
+        await fs.rmdirSync(path.join(clonePath, repoSubpath), { recursive: true });
+    } catch (e) {
+        // Ignore.
+    }
     const command = `git clone --branch ${tag} ${repo} ${repoSubpath} --depth 1 --single-branch --no-tags`;
-	console.log(`Executing: ${command}`);
-	child_process.execSync(command, {
-		stdio: 'inherit',
-		cwd: clonePath,
-		encoding: 'utf8'
-	});
+    console.log(`Executing: ${command}`);
+    child_process.execSync(command, {
+        stdio: 'inherit',
+        cwd: clonePath,
+        encoding: 'utf8'
+    });
 
     const treeSitterRepoPath = path.join(clonePath, repoSubpath);
     child_process.execSync('./script/build-wasm', {
