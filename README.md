@@ -1,14 +1,6 @@
-# Project
+# Pre-built Tree-Sitter wasm files
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
-
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+This repository contains scripts and build pipelines for building the Tree-Sitter and Tree-Sitter grammar WebAssembly files used by VS Code.
 
 ## Contributing
 
@@ -23,6 +15,17 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Build steps
+
+> Note: If you're using Windows, you'll need to use WSL. 
+
+First, install all of the dependencies using `npm install`. You will also need to install [emscripten](https://emscripten.org/docs/getting_started/downloads.html). 
+
+Then, build the the wasm files using `npm run build-wasm`, which will do the following:
+- Clone the tree-sitter repository
+- Build the tree-sitter WebAssembly bindings
+- Build the tree-sitter grammars listed in https://github.com/microsoft/vscode-tree-sitter-wasm/blob/alexr00/0.0.1/build/main.ts
 
 ## Trademarks
 
