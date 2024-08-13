@@ -45,3 +45,4 @@ extends:
             displayName: Build all wasm
 
         publishPackage: ${{ parameters.publishPackage }}
+        skipAPIScan: true # Package does not build on Windows
