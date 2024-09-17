@@ -12,6 +12,9 @@ async function compileGrammarWasm(outputPath: string) {
         {
             name: 'tree-sitter-typescript',
             projectPath: 'tree-sitter-typescript/typescript', // non-standard path
+        },
+        {
+            name: 'tree-sitter-regex',
         }
     ];
 
