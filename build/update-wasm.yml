@@ -34,7 +34,7 @@ extends:
 
           - script: echo '##vso[task.prependpath]/opt/dev/emsdk/upstream/emscripten'
             displayName: Setup emsdk path 1
-            
+
           - script: echo '##vso[task.prependpath]/opt/dev/emsdk'
             displayName: Setup emsdk path 2
 
@@ -44,5 +44,6 @@ extends:
           - script: npm run build-wasm
             displayName: Build all wasm
 
+        cgIgnoreDirectories: $(Build.SourcesDirectory)/tree-sitter/docs
         publishPackage: ${{ parameters.publishPackage }}
         skipAPIScan: true # Package does not build on Windows
