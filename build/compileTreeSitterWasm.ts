@@ -7,10 +7,10 @@ import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async function ensureTreeSitterWasm(repo: string, tag: string, clonePath: string, outputPath: string) {
+export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: string, outputPath: string) {
     const repoSubpath = 'tree-sitter';
     try {
-        await fs.rmSync(path.join(clonePath, repoSubpath), { recursive: true });
+        fs.rmSync(path.join(clonePath, repoSubpath), { recursive: true });
     } catch (e) {
         // Ignore.
     }
