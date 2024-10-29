@@ -10,7 +10,7 @@ import * as path from 'path';
 export async function ensureTreeSitterWasm(repo: string, tag: string, clonePath: string, outputPath: string) {
     const repoSubpath = 'tree-sitter';
     try {
-        await fs.rmdirSync(path.join(clonePath, repoSubpath), { recursive: true });
+        await fs.rmSync(path.join(clonePath, repoSubpath), { recursive: true });
     } catch (e) {
         // Ignore.
     }
@@ -23,6 +23,15 @@ export async function ensureTreeSitterWasm(repo: string, tag: string, clonePath:
     });
 
     const treeSitterRepoPath = path.join(clonePath, repoSubpath);
+
+    console.log('Updating wasmtime');
+    child_process.execSync('cargo update -p wasmtime', {
+        cwd: treeSitterRepoPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
+    console.log('Executing build-wasm script');
     child_process.execSync('./script/build-wasm', {
         cwd: treeSitterRepoPath,
         stdio: 'inherit',
