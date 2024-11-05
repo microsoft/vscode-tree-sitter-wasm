@@ -10,12 +10,42 @@ import { ensureTreeSitterWasm } from './compileTreeSitterWasm';
 async function compileGrammarWasm(outputPath: string) {
     const treeSitterGrammars: ITreeSitterGrammar[] = [
         {
-            name: 'tree-sitter-typescript',
-            projectPath: 'tree-sitter-typescript/typescript', // non-standard path
+            name: 'tree-sitter-c-sharp',
+            filename: 'tree-sitter-c_sharp.wasm' // non-standard filename
+        },
+        {
+            name: 'tree-sitter-cpp',
+        },
+        {
+            name: 'tree-sitter-go',
+        },
+        {
+            name: 'tree-sitter-java',
+        },
+        {
+            name: 'tree-sitter-javascript', // Also includes jsx support
+        },
+        {
+            name: 'tree-sitter-python',
         },
         {
             name: 'tree-sitter-regex',
-        }
+        },
+        {
+            name: 'tree-sitter-ruby',
+        },
+        {
+            name: 'tree-sitter-rust',
+        },
+        {
+            name: 'tree-sitter-tsx',
+            projectPath: 'tree-sitter-typescript/tsx', // non-standard path
+        },
+        {
+            name: 'tree-sitter-typescript',
+            projectPath: 'tree-sitter-typescript/typescript', // non-standard path
+        },
+
     ];
 
     for (const grammar of treeSitterGrammars) {

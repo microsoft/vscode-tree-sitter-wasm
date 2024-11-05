@@ -19,8 +19,16 @@
   "types": "wasm/tree-sitter-web.d.ts",
   "devDependencies": {
     "@types/node": "^20.14.6",
+    "tree-sitter-c-sharp": "^0.23.0",
     "tree-sitter-cli": "^0.23.0",
+    "tree-sitter-cpp": "^0.23.1",
+    "tree-sitter-go": "^0.23.1",
+    "tree-sitter-java": "^0.23.2",
+    "tree-sitter-javascript": "^0.23.0",
+    "tree-sitter-python": "^0.23.2",
     "tree-sitter-regex": "^0.23.0",
+    "tree-sitter-ruby": "^0.23.0",
+    "tree-sitter-rust": "^0.23.0",
     "tree-sitter-typescript": "^0.23.0",
     "ts-node": "^10.9.2"
   },
