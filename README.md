@@ -18,7 +18,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ### Build steps
 
-> Note: If you're using Windows, you'll need to use WSL. 
+> Note: If you're using Windows, you'll need to use WSL. Ensure Docker integration for WSL is enabled before attempting to build. Without this integration, the build process may encounter errors.
 
 First, install all of the dependencies using `npm install`. You will also need to install [emscripten](https://emscripten.org/docs/getting_started/downloads.html). 
 
