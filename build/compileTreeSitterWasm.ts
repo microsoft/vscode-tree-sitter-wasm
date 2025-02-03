@@ -31,6 +31,13 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
         encoding: 'utf-8'
     });
 
+    console.log('Updating idna');
+    child_process.execSync('cargo update -p idna', {
+        cwd: treeSitterRepoPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
     console.log('Executing build-wasm script');
     child_process.execSync('./script/build-wasm', {
         cwd: treeSitterRepoPath,
