@@ -53,7 +53,7 @@ async function compileGrammarWasm(outputPath: string) {
     }
 }
 
-function compileTreeSitterWasm(clonePath: string,outputPath: string) {
+function compileTreeSitterWasm(clonePath: string, outputPath: string) {
     const tag = 'v0.25.1';
     const repo = 'https://github.com/tree-sitter/tree-sitter';
     ensureTreeSitterWasm(repo, tag, clonePath, outputPath);

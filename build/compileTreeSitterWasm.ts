@@ -31,48 +31,35 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
         encoding: 'utf-8'
     });
 
+    const builtWasmPath = path.join(treeSitterRepoPath, 'lib/binding_web');
+
+
     console.log('Executing build-wasm script');
-    child_process.execSync('./script/build-wasm', {
-        cwd: treeSitterRepoPath,
+    child_process.execSync('npm install', {
+        cwd: builtWasmPath,
         stdio: 'inherit',
         encoding: 'utf-8'
     });
 
-    const builtWasmPath = path.join(treeSitterRepoPath, 'lib/binding_web');
+    console.log('Executing build-wasm script');
+    child_process.execSync('npm run build', {
+        cwd: builtWasmPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
     const jsFile = 'tree-sitter.js';
-    const dtsFile = 'tree-sitter-web.d.ts';
+    const dtsFile = 'web-tree-sitter.d.ts';
     const files = [
         'tree-sitter.wasm',
         dtsFile,
         jsFile
     ];
+
     for (const file of files) {
         const src = path.join(builtWasmPath, file);
         const dest = path.join(outputPath, file);
         console.log(`Copying ${src} to ${dest}`);
         child_process.execSync(`cp ${src} ${dest}`);
     }
-
-    const dtsFilePath = path.join(outputPath, dtsFile);
-    let dtsFileContents = fs.readFileSync(dtsFilePath, 'utf-8');
-    dtsFileContents = dtsFileContents.substring(dtsFileContents.indexOf('{') + 1, dtsFileContents.lastIndexOf('export = Parser'));
-    dtsFileContents = dtsFileContents.replace('class Parser', 'export class Parser');
-    dtsFileContents = dtsFileContents.replace('namespace Parser', 'export namespace Parser');
-    fs.writeFileSync(dtsFilePath, dtsFileContents);
-
-    const jsFilePath = path.join(outputPath, jsFile);
-    let jsFileContents = fs.readFileSync(jsFilePath, 'utf-8');
-    // Make it UMD.
-    jsFileContents = `(function (global, factory) {
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-		typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-			(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Parser = {}));
-})(this, (function () {
-
-${jsFileContents}
-
-	return { Parser: TreeSitter };
-}));`
-
-    fs.writeFileSync(jsFilePath, jsFileContents);
 }
