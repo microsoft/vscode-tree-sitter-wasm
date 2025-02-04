@@ -45,10 +45,11 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     child_process.execSync('npm run build', {
         cwd: builtWasmPath,
         stdio: 'inherit',
-        encoding: 'utf-8'
+        encoding: 'utf-8',
+        env: { ...process.env, EXPORT_ES6: '1', CJS: 'true', ESM: 'true' }
     });
 
-    const jsFile = 'tree-sitter.js';
+    const jsFile = 'tree-sitter.cjs';
     const dtsFile = 'web-tree-sitter.d.ts';
     const files = [
         'tree-sitter.wasm',
@@ -62,4 +63,31 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
         console.log(`Copying ${src} to ${dest}`);
         child_process.execSync(`cp ${src} ${dest}`);
     }
+
+    const dtsFilePath = path.join(outputPath, dtsFile);
+    let dtsFileContents = fs.readFileSync(dtsFilePath, 'utf-8');
+    dtsFileContents = dtsFileContents.substring(dtsFileContents.indexOf('{') + 1, dtsFileContents.lastIndexOf('}'));
+    dtsFileContents = dtsFileContents.replace(/\tclass/g, '\texport class');
+    fs.writeFileSync(dtsFilePath, dtsFileContents);
+
+    const jsFilePath = path.join(outputPath, jsFile);
+    let jsFileContents = fs.readFileSync(jsFilePath, 'utf-8');
+    const moduleExportKey = 'module.exports = {';
+    const exportsStart = jsFileContents.indexOf(moduleExportKey) + moduleExportKey.length;
+    const exportsEnd = jsFileContents.indexOf('}', exportsStart);
+    const exports = jsFileContents.substring(exportsStart, exportsEnd);
+
+    // Make it UMD.
+    jsFileContents = `(function (global, factory) {
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+			(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Parser = {}));
+})(this, (function () {
+
+${jsFileContents}
+
+	return { ${exports} };
+}));`
+
+    fs.writeFileSync(jsFilePath, jsFileContents);
 }
