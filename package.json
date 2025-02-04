@@ -16,7 +16,7 @@
     "cgmanifest.json"
   ],
   "main": "wasm/tree-sitter.js",
-  "types": "wasm/tree-sitter-web.d.ts",
+  "types": "wasm/web-tree-sitter.d.ts",
   "devDependencies": {
     "@types/node": "^20.14.6",
     "tree-sitter-c-sharp": "^0.23.0",
