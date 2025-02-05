@@ -91,16 +91,29 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
 
     // Helper to replace import.meta.url
     function getCurrentScriptUrl() {
-      if (typeof document !== 'undefined') {
-          // Browser environment
-          const script = document.currentScript;
-          return script ? script.src : undefined;
-      } else if (typeof __filename !== 'undefined') {
-          // Node.js environment
-          return require('url').pathToFileURL(__filename).href;
+      // Node.js environment
+      if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+        return require('url').pathToFileURL(__filename).href;
       }
-      return undefined;
-  }
+
+      // Browser environment
+      if (typeof document !== 'undefined' && document.currentScript) {
+          return document.currentScript.src;
+      }
+
+      // AMD environment
+      if (typeof define === 'function' && define.amd) {
+          let scriptUrl;
+          define('__temp', [], function() {
+              scriptUrl = module.uri;
+              define('__temp', null);
+          });
+          require(['__temp']);
+          return scriptUrl;
+      }
+
+      throw new Error('Unable to determine script URL');
+    }
 
 ${jsFileContents.replace(/import.meta.url/g, 'getCurrentScriptUrl()')}
 
