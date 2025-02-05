@@ -34,7 +34,7 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     const builtWasmPath = path.join(treeSitterRepoPath, 'lib/binding_web');
 
 
-    console.log('Executing build-wasm script');
+    console.log('Installing dependencies');
     child_process.execSync('npm install', {
         cwd: builtWasmPath,
         stdio: 'inherit',
@@ -46,10 +46,10 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
         cwd: builtWasmPath,
         stdio: 'inherit',
         encoding: 'utf-8',
-        env: { ...process.env, EXPORT_ES6: '1', CJS: 'true', ESM: 'true' }
+        env: { ...process.env, EXPORT_ES6: '1', ESM: 'true' }
     });
 
-    const jsFile = 'tree-sitter.cjs';
+    const jsFile = 'tree-sitter.js';
     const dtsFile = 'web-tree-sitter.d.ts';
     const files = [
         'tree-sitter.wasm',
@@ -72,10 +72,15 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
 
     const jsFilePath = path.join(outputPath, jsFile);
     let jsFileContents = fs.readFileSync(jsFilePath, 'utf-8');
-    const moduleExportKey = 'module.exports = {';
-    const exportsStart = jsFileContents.indexOf(moduleExportKey) + moduleExportKey.length;
+
+    const moduleExportKey = 'export {';
+    const indexLastExport = jsFileContents.lastIndexOf(moduleExportKey);
+
+    const exportsStart = indexLastExport + moduleExportKey.length;
     const exportsEnd = jsFileContents.indexOf('}', exportsStart);
     const exports = jsFileContents.substring(exportsStart, exportsEnd);
+
+    jsFileContents = jsFileContents.substring(0, indexLastExport);
 
     // Make it UMD.
     jsFileContents = `(function (global, factory) {
@@ -84,7 +89,33 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
 			(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Parser = {}));
 })(this, (function () {
 
-${jsFileContents}
+    // Helper to replace import.meta.url
+    function getCurrentScriptUrl() {
+      // Node.js environment
+      if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+        return require('url').pathToFileURL(__filename).href;
+      }
+
+      // Browser environment
+      if (typeof document !== 'undefined' && document.currentScript) {
+          return document.currentScript.src;
+      }
+
+      // AMD environment
+      if (typeof define === 'function' && define.amd) {
+          let scriptUrl;
+          define('__temp', [], function() {
+              scriptUrl = module.uri;
+              define('__temp', null);
+          });
+          require(['__temp']);
+          return scriptUrl;
+      }
+
+      throw new Error('Unable to determine script URL');
+    }
+
+${jsFileContents.replace(/import.meta.url/g, 'getCurrentScriptUrl()')}
 
 	return { ${exports} };
 }));`
