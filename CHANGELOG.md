@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Fix some issues where various VS Code tools wouldn't work
+
 ## 0.1.0
 
 - Adopt Tree-Sitter 0.25.1, up from 0.23.0

@@ -68,6 +68,7 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     let dtsFileContents = fs.readFileSync(dtsFilePath, 'utf-8');
     dtsFileContents = dtsFileContents.substring(dtsFileContents.indexOf('{') + 1, dtsFileContents.lastIndexOf('}'));
     dtsFileContents = dtsFileContents.replace(/\tclass/g, '\texport class');
+    dtsFileContents = dtsFileContents.replace('EmscriptenModule', '{ locateFile: (_file: string, _folder: string) => string; }')
     fs.writeFileSync(dtsFilePath, dtsFileContents);
 
     const jsFilePath = path.join(outputPath, jsFile);
@@ -91,28 +92,18 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
 
     // Helper to replace import.meta.url
     function getCurrentScriptUrl() {
-      // Node.js environment
-      if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-        return require('url').pathToFileURL(__filename).href;
-      }
+        if (typeof __filename !== 'undefined') {
+            // Node.js environment
+            return require('url').pathToFileURL(__filename).href;
+        }
 
-      // Browser environment
-      if (typeof document !== 'undefined' && document.currentScript) {
-          return document.currentScript.src;
-      }
+        if (typeof document !== 'undefined') {
+            // Browser environment
+            const script = document.currentScript;
+            return script ? script.src : undefined;
+        }
 
-      // AMD environment
-      if (typeof define === 'function' && define.amd) {
-          let scriptUrl;
-          define('__temp', [], function() {
-              scriptUrl = module.uri;
-              define('__temp', null);
-          });
-          require(['__temp']);
-          return scriptUrl;
-      }
-
-      throw new Error('Unable to determine script URL');
+        throw new Error('Unable to determine script URL');
     }
 
 ${jsFileContents.replace(/import.meta.url/g, 'getCurrentScriptUrl()')}
