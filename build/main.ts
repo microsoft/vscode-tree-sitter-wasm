@@ -45,7 +45,13 @@ async function compileGrammarWasm(outputPath: string) {
             name: 'tree-sitter-typescript',
             projectPath: 'tree-sitter-typescript/typescript', // non-standard path
         },
-
+        {
+            name: 'tree-sitter-ini',
+            git: {
+                repo: 'https://github.com/justinmk/tree-sitter-ini',
+                sha: '962568c9efa71d25720ab42c5d36e222626ef3a6'
+            }
+        }
     ];
 
     for (const grammar of treeSitterGrammars) {

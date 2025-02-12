@@ -6,6 +6,7 @@
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
+import { clone } from './git';
 
 const PROJECT_ROOT = path.dirname(__dirname);
 
@@ -19,11 +20,21 @@ export interface ITreeSitterGrammar {
 	 * The path where we should spawn `tree-sitter build-wasm`
 	 */
 	projectPath?: string;
+
+	git?: {
+		repo: string;
+		sha: string;
+	}
 }
 
 export async function ensureWasm(grammar: ITreeSitterGrammar, outputPath: string): Promise<void> {
 	console.log(`Building ${grammar.name}!`);
-	const folderPath = path.join(PROJECT_ROOT, 'node_modules', grammar.projectPath || grammar.name);
+	const nodeModulesPath = path.join(PROJECT_ROOT, 'node_modules');
+	if (grammar.git) {
+		clone(grammar.git.repo, undefined, grammar.git.sha, grammar.name, nodeModulesPath);
+	}
+
+	const folderPath = path.join(nodeModulesPath, grammar.projectPath || grammar.name);
 
 	// Create .build folder if it doesn't exist
 	await fs.promises.mkdir(outputPath, { recursive: true });
