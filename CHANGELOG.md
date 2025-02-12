@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Add ini
+
 ## 0.1.1
 
 - Fix some issues where various VS Code tools wouldn't work
