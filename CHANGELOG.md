@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Pick up Tree-Sitter 0.25.2
+
 ## 0.1.2
 
 - Add ini
