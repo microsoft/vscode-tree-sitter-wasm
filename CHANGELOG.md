@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+- Add css
+
 ## 0.1.3
 
 - Pick up Tree-Sitter 0.25.2
