@@ -14,7 +14,7 @@ export function clone(repo: string, tag: string | undefined, commit: string | un
     } catch (e) {
         // Ignore.
     }
-    const command = `git clone ${tag ? `--branch ${tag} ` : ''}${repo} ${repoSubpath} --depth 1 --single-branch --no-tags`;
+    const command = `git clone ${tag ? `--branch ${tag} ` : ''}${repo} ${repoSubpath} ${commit ? '' : '--depth 1 '}--single-branch --no-tags`;
     console.log(`Executing: ${command}`);
     child_process.execSync(command, {
         stdio: 'inherit',
