@@ -6,11 +6,13 @@
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { clone } from './git';
+import { clone, patch } from './git';
 
 export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: string, outputPath: string) {
     const repoSubpath = 'tree-sitter';
     const treeSitterRepoPath = clone(repo, tag, undefined, repoSubpath, clonePath);
+
+    patch(clonePath, repoSubpath, '../patches/remove-ureq-xtask.patch');
 
     console.log('Updating wasmtime');
     child_process.execSync('cargo update -p wasmtime', {
