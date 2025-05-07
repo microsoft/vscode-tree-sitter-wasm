@@ -1,0 +1,89 @@
+diff --git a/xtask/Cargo.toml b/xtask/Cargo.toml
+index a4000f9..f9630fc 100644
+--- a/xtask/Cargo.toml
++++ b/xtask/Cargo.toml
+@@ -27,6 +27,5 @@ regex.workspace = true
+ semver.workspace = true
+ serde.workspace = true
+ serde_json.workspace = true
+-ureq = "3.0.0"
+ notify = "8.0.0"
+ notify-debouncer-full = "0.5.0"
+diff --git a/xtask/src/main.rs b/xtask/src/main.rs
+index b02136f..069c670 100644
+--- a/xtask/src/main.rs
++++ b/xtask/src/main.rs
+@@ -6,7 +6,6 @@ mod clippy;
+ mod fetch;
+ mod generate;
+ mod test;
+-mod upgrade_emscripten;
+ mod upgrade_wasmtime;
+ 
+ use std::path::Path;
+@@ -48,9 +47,7 @@ enum Commands {
+     /// Run the WASM test suite
+     TestWasm,
+     /// Upgrade the wasmtime dependency.
+-    UpgradeWasmtime(UpgradeWasmtime),
+-    /// Upgrade the emscripten file.
+-    UpgradeEmscripten,
++    UpgradeWasmtime(UpgradeWasmtime)
+ }
+ 
+ #[derive(Args)]
+@@ -238,7 +235,6 @@ fn run() -> Result<()> {
+         Commands::UpgradeWasmtime(upgrade_wasmtime_options) => {
+             upgrade_wasmtime::run(&upgrade_wasmtime_options)?;
+         }
+-        Commands::UpgradeEmscripten => upgrade_emscripten::run()?,
+     }
+ 
+     Ok(())
+diff --git a/xtask/src/upgrade_emscripten.rs b/xtask/src/upgrade_emscripten.rs
+deleted file mode 100644
+index 9736e64..0000000
+--- a/xtask/src/upgrade_emscripten.rs
++++ /dev/null
+@@ -1,41 +0,0 @@
+-use std::{fs, path::Path};
+-
+-use anyhow::{anyhow, Result};
+-use git2::Repository;
+-use serde_json::Value;
+-
+-use crate::create_commit;
+-
+-pub fn run() -> Result<()> {
+-    let response = ureq::get("https://api.github.com/repos/emscripten-core/emsdk/tags")
+-        .call()?
+-        .body_mut()
+-        .read_to_string()?;
+-
+-    let json = serde_json::from_str::<Value>(&response)?;
+-    let version = json
+-        .as_array()
+-        .and_then(|arr| arr.first())
+-        .and_then(|tag| tag["name"].as_str())
+-        .ok_or(anyhow!("No tags found"))?;
+-
+-    let version_file = Path::new(env!("CARGO_MANIFEST_DIR"))
+-        .parent()
+-        .unwrap()
+-        .join("cli")
+-        .join("loader")
+-        .join("emscripten-version");
+-
+-    fs::write(version_file, version)?;
+-
+-    println!("Upgraded emscripten version to {version}");
+-
+-    let repo = Repository::open(".")?;
+-    create_commit(
+-        &repo,
+-        &format!("build(deps): bump emscripten to {version}"),
+-        &["cli/loader/emscripten-version"],
+-    )?;
+-
+-    Ok(())
+-}

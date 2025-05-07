@@ -31,3 +31,13 @@ export function clone(repo: string, tag: string | undefined, commit: string | un
 
     return repoPath;
 }
+
+export function patch(clonePath: string, repoSubpath: string, relativePatchPath: string) {
+    const repoPath = path.join(clonePath, repoSubpath);
+    console.log(`Patching ${repoSubpath} with ${relativePatchPath}`);
+    child_process.execSync(`git apply ${relativePatchPath}`, {
+        stdio: 'inherit',
+        cwd: repoPath,
+        encoding: 'utf8'
+    });
+}
