@@ -12,6 +12,7 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     const repoSubpath = 'tree-sitter';
     const treeSitterRepoPath = clone(repo, tag, undefined, repoSubpath, clonePath);
 
+    // Remove ureq as it pulls in a non-standard crypto library
     patch(clonePath, repoSubpath, '../patches/remove-ureq-xtask.patch');
 
     console.log('Updating wasmtime');
