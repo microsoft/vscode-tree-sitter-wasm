@@ -24,9 +24,15 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
 
     const builtWasmPath = path.join(treeSitterRepoPath, 'lib/binding_web');
 
-
     console.log('Installing dependencies');
     child_process.execSync('npm install', {
+        cwd: builtWasmPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
+    console.log('Updating brace-expansion');
+    child_process.execSync('npm update brace-expansion', {
         cwd: builtWasmPath,
         stdio: 'inherit',
         encoding: 'utf-8'
