@@ -27,6 +27,14 @@ export interface ITreeSitterGrammar {
 	}
 }
 
+export interface ITreeSitterPrebuildWasm {
+	name: string;
+	/**
+	 * A custom .wasm filename if the grammar node module doesn't follow the standard naming convention
+	 */
+	filename?: string;
+}
+
 export async function ensureWasm(grammar: ITreeSitterGrammar, outputPath: string): Promise<void> {
 	console.log(`Building ${grammar.name}!`);
 	const nodeModulesPath = path.join(PROJECT_ROOT, 'node_modules');

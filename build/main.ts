@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as path from 'path';
-import { ITreeSitterGrammar, ensureWasm } from './compileGrammarWasm';
+import * as fs from 'fs/promises'
+import { ITreeSitterGrammar, ensureWasm, type ITreeSitterPrebuildWasm } from './compileGrammarWasm';
 import { ensureTreeSitterWasm } from './compileTreeSitterWasm';
 
 async function compileGrammarWasm(outputPath: string) {
@@ -62,13 +63,38 @@ async function compileGrammarWasm(outputPath: string) {
     }
 }
 
+async function copyPrebuildWasm(outputPath: string) {
+    const treeSitterGrammars: ITreeSitterPrebuildWasm[] = [
+        {
+            name: 'tree-sitter-php',
+        }
+    ];
+
+    for (const grammar of treeSitterGrammars) {
+        const wasmName = grammar.filename ?? `${grammar.name}.wasm`;
+        console.log(`Copying prebuild wasm ${wasmName}`);
+        const filename = path.join(root, 'node_modules', grammar.name, wasmName);
+        await fs.cp(filename, path.join(outputPath, wasmName));
+    }
+}
+
 function compileTreeSitterWasm(clonePath: string, outputPath: string) {
     const tag = 'v0.25.2';
     const repo = 'https://github.com/tree-sitter/tree-sitter';
     ensureTreeSitterWasm(repo, tag, clonePath, outputPath);
 }
 
+const root = path.dirname(__dirname);
 const baseOutput = process.argv[2] ?? path.join(path.dirname(__dirname))
 const wasmOutput = path.join(baseOutput, 'wasm');
-compileGrammarWasm(wasmOutput);
-compileTreeSitterWasm(baseOutput, wasmOutput);
+
+async function main() {
+    await copyPrebuildWasm(wasmOutput);
+    await compileGrammarWasm(wasmOutput);
+    compileTreeSitterWasm(baseOutput, wasmOutput);
+}
+
+main().catch(err => {
+    console.log(err);
+    process.exitCode = -1;
+});
