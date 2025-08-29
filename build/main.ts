@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as path from 'path';
-import * as fs from 'fs/promises'
-import { ITreeSitterGrammar, ensureWasm, type ITreeSitterPrebuildWasm } from './compileGrammarWasm';
+import { ITreeSitterGrammar, ensureWasm } from './compileGrammarWasm';
 import { ensureTreeSitterWasm } from './compileTreeSitterWasm';
 
 async function compileGrammarWasm(outputPath: string) {
@@ -55,6 +54,18 @@ async function compileGrammarWasm(outputPath: string) {
         {
             name: 'tree-sitter-typescript',
             projectPath: 'tree-sitter-typescript/typescript', // non-standard path
+        },
+        {
+            name: 'tree-sitter-php',
+            git: {
+                repo: 'https://github.com/tree-sitter/tree-sitter-php',
+                tag: 'v0.23.12',
+                installCommand: 'npm install'
+            },
+            treeSitter: {
+                command: 'node ../node_modules/.bin/tree-sitter build --wasm',
+                cwd: 'tree-sitter-php/php'
+            }
         }
     ];
 
@@ -63,20 +74,6 @@ async function compileGrammarWasm(outputPath: string) {
     }
 }
 
-async function copyPrebuildWasm(outputPath: string) {
-    const treeSitterGrammars: ITreeSitterPrebuildWasm[] = [
-        {
-            name: 'tree-sitter-php',
-        }
-    ];
-
-    for (const grammar of treeSitterGrammars) {
-        const wasmName = grammar.filename ?? `${grammar.name}.wasm`;
-        console.log(`Copying prebuild wasm ${wasmName}`);
-        const filename = path.join(root, 'node_modules', grammar.name, wasmName);
-        await fs.cp(filename, path.join(outputPath, wasmName));
-    }
-}
 
 function compileTreeSitterWasm(clonePath: string, outputPath: string) {
     const tag = 'v0.25.2';
@@ -84,12 +81,10 @@ function compileTreeSitterWasm(clonePath: string, outputPath: string) {
     ensureTreeSitterWasm(repo, tag, clonePath, outputPath);
 }
 
-const root = path.dirname(__dirname);
 const baseOutput = process.argv[2] ?? path.join(path.dirname(__dirname))
 const wasmOutput = path.join(baseOutput, 'wasm');
 
 async function main() {
-    await copyPrebuildWasm(wasmOutput);
     await compileGrammarWasm(wasmOutput);
     compileTreeSitterWasm(baseOutput, wasmOutput);
 }

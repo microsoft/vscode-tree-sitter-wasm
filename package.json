@@ -31,7 +31,6 @@
     "tree-sitter-ruby": "^0.23.0",
     "tree-sitter-rust": "^0.23.0",
     "tree-sitter-typescript": "^0.23.0",
-    "tree-sitter-php": "^0.23.12",
     "ts-node": "^10.9.2"
   },
   "repository": {
