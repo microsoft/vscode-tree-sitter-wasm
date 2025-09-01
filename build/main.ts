@@ -57,15 +57,7 @@ async function compileGrammarWasm(outputPath: string) {
         },
         {
             name: 'tree-sitter-php',
-            git: {
-                repo: 'https://github.com/tree-sitter/tree-sitter-php',
-                tag: 'v0.23.12',
-                installCommand: 'npm install'
-            },
-            treeSitter: {
-                command: 'node ../node_modules/.bin/tree-sitter build --wasm',
-                cwd: 'tree-sitter-php/php'
-            }
+            projectPath: 'tree-sitter-php/php', // non-standard path
         }
     ];
 
