@@ -54,6 +54,10 @@ async function compileGrammarWasm(outputPath: string) {
         {
             name: 'tree-sitter-typescript',
             projectPath: 'tree-sitter-typescript/typescript', // non-standard path
+        },
+        {
+            name: 'tree-sitter-php',
+            projectPath: 'tree-sitter-php/php', // non-standard path
         }
     ];
 
@@ -61,6 +65,7 @@ async function compileGrammarWasm(outputPath: string) {
         await ensureWasm(grammar, outputPath);
     }
 }
+
 
 function compileTreeSitterWasm(clonePath: string, outputPath: string) {
     const tag = 'v0.25.2';
@@ -70,5 +75,13 @@ function compileTreeSitterWasm(clonePath: string, outputPath: string) {
 
 const baseOutput = process.argv[2] ?? path.join(path.dirname(__dirname))
 const wasmOutput = path.join(baseOutput, 'wasm');
-compileGrammarWasm(wasmOutput);
-compileTreeSitterWasm(baseOutput, wasmOutput);
+
+async function main() {
+    await compileGrammarWasm(wasmOutput);
+    compileTreeSitterWasm(baseOutput, wasmOutput);
+}
+
+main().catch(err => {
+    console.log(err);
+    process.exitCode = -1;
+});

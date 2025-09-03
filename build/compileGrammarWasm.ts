@@ -24,6 +24,9 @@ export interface ITreeSitterGrammar {
 	git?: {
 		repo: string;
 		sha: string;
+	} | {
+		repo: string;
+		tag: string
 	}
 }
 
@@ -31,15 +34,15 @@ export async function ensureWasm(grammar: ITreeSitterGrammar, outputPath: string
 	console.log(`Building ${grammar.name}!`);
 	const nodeModulesPath = path.join(PROJECT_ROOT, 'node_modules');
 	if (grammar.git) {
-		clone(grammar.git.repo, undefined, grammar.git.sha, grammar.name, nodeModulesPath);
+		const git = grammar.git as { repo: string; sha?: string; tag?: string; installCommand?: string };
+		clone(grammar.git.repo, git.tag, git.sha, grammar.name, nodeModulesPath);
 	}
-
-	const folderPath = path.join(nodeModulesPath, grammar.projectPath || grammar.name);
 
 	// Create .build folder if it doesn't exist
 	await fs.promises.mkdir(outputPath, { recursive: true });
 
 	const treeSitterBinPath = path.join(PROJECT_ROOT, 'node_modules', '.bin', 'tree-sitter');
+	const folderPath = path.join(nodeModulesPath, grammar.projectPath || grammar.name);
 	const command = `node ${treeSitterBinPath} build --wasm ${folderPath}`;
 	console.log(`Executing: ${command}`);
 	child_process.execSync(command, {
