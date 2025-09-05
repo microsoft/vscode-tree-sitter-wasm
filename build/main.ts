@@ -4,8 +4,37 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as path from 'path';
+import * as fs from 'fs';
 import { ITreeSitterGrammar, ensureWasm } from './compileGrammarWasm';
 import { ensureTreeSitterWasm } from './compileTreeSitterWasm';
+
+const ROOT = path.dirname(__dirname)
+
+function patchGoPackageJson() {
+    const goPackageJsonPath = path.join(ROOT, 'node_modules', 'tree-sitter-go', 'package.json');
+    const goPackageJson = require(goPackageJsonPath);
+    if (goPackageJson['name'] !== 'tree-sitter-go') {
+        throw new Error(`Unexpected package name in ${goPackageJsonPath}`);
+    }
+    if (goPackageJson['tree-sitter']) {
+        // The file has a tree-sitter field already
+        return;
+    }
+    goPackageJson['tree-sitter'] = [
+        {
+            "name": "go",
+            "camelcase": "Go",
+            "scope": "source.go",
+            "path": ".",
+            "file-types": [
+                "go"
+            ],
+            "highlights": "queries/highlights.scm",
+            "tags": "queries/tags.scm"
+        }
+    ]
+    fs.writeFileSync(goPackageJsonPath, JSON.stringify(goPackageJson, null, 2) + '\n');
+}
 
 async function compileGrammarWasm(outputPath: string) {
     const treeSitterGrammars: ITreeSitterGrammar[] = [
@@ -63,7 +92,8 @@ function compileTreeSitterWasm(clonePath: string,outputPath: string) {
     ensureTreeSitterWasm(repo, tag, clonePath, outputPath);
 }
 
-const baseOutput = process.argv[2] ?? path.join(path.dirname(__dirname))
+const baseOutput = process.argv[2] ?? path.join(ROOT)
 const wasmOutput = path.join(baseOutput, 'wasm');
+patchGoPackageJson();
 compileGrammarWasm(wasmOutput);
 compileTreeSitterWasm(baseOutput, wasmOutput);
