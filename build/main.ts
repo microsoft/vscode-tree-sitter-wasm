@@ -10,6 +10,9 @@ import { ensureTreeSitterWasm } from './compileTreeSitterWasm';
 async function compileGrammarWasm(outputPath: string) {
     const treeSitterGrammars: ITreeSitterGrammar[] = [
         {
+            name: 'tree-sitter-bash'
+        },
+        {
             name: 'tree-sitter-css'
         },
         {
