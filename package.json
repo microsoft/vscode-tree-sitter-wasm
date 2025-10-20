@@ -19,7 +19,7 @@
   "types": "wasm/web-tree-sitter.d.ts",
   "devDependencies": {
     "@types/node": "^20.14.6",
-    "tree-sitter-bash": "^0.23.3",
+    "tree-sitter-bash": "^0.23.0",
     "tree-sitter-c-sharp": "^0.23.0",
     "tree-sitter-cli": "^0.23.0",
     "tree-sitter-cpp": "^0.23.1",
