@@ -39,6 +39,13 @@ async function compileGrammarWasm(outputPath: string) {
             name: 'tree-sitter-javascript', // Also includes jsx support
         },
         {
+            name: 'tree-sitter-powershell',
+            git: {
+                repo: 'https://github.com/airbus-cert/tree-sitter-powershell',
+                sha: 'ebe2ab2f642eda2072c68c8de02e83973c26f33c'
+            }
+        },
+        {
             name: 'tree-sitter-python',
         },
         {
