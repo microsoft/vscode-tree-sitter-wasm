@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.6
+
+- Add bash
+- Add powershell
+
+## 0.1.5
+
+- Add php
+
 ## 0.1.4
 
 - Add css
