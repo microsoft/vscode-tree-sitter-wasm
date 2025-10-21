@@ -1,6 +1,6 @@
 {
   "name": "@vscode/tree-sitter-wasm",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Pre-built WASM files for Tree-Sitter and Tree-Sitter languages that VS Code uses",
   "scripts": {
     "build-wasm": "ts-node ./build/main.ts",
