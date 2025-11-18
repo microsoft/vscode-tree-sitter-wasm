@@ -6,7 +6,7 @@
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { clone } from './git';
+import { clone, patch } from './git';
 
 const PROJECT_ROOT = path.dirname(__dirname);
 
@@ -36,6 +36,16 @@ export async function ensureWasm(grammar: ITreeSitterGrammar, outputPath: string
 	if (grammar.git) {
 		const git = grammar.git as { repo: string; sha?: string; tag?: string; installCommand?: string };
 		clone(grammar.git.repo, git.tag, git.sha, grammar.name, nodeModulesPath);
+
+		// Apply patches for this grammar if any exist in patches/<grammar.name>
+		const patchesDir = path.join(PROJECT_ROOT, 'patches', grammar.name);
+		if (fs.existsSync(patchesDir)) {
+			const patchFiles = fs.readdirSync(patchesDir).filter(f => f.endsWith('.patch'));
+			for (const file of patchFiles) {
+				console.log(`Applying patch ${file} for ${grammar.name}`);
+				patch(nodeModulesPath, grammar.name, path.join(patchesDir, file));
+			}
+		}
 	}
 
 	// Create .build folder if it doesn't exist
