@@ -17,10 +17,18 @@ async function compileGrammarWasm(outputPath: string) {
         },
         {
             name: 'tree-sitter-c-sharp',
+            git: {
+                repo: 'https://github.com/tree-sitter/tree-sitter-c-sharp',
+                sha: '485f0bae0274ac9114797fc10db6f7034e4086e3'
+            },
             filename: 'tree-sitter-c_sharp.wasm' // non-standard filename
         },
         {
             name: 'tree-sitter-cpp',
+            git: {
+                repo: 'https://github.com/tree-sitter/tree-sitter-cpp',
+                sha: '12bd6f7e96080d2e70ec51d4068f2f66120dde35'
+            }
         },
         {
             name: 'tree-sitter-go',
@@ -29,7 +37,7 @@ async function compileGrammarWasm(outputPath: string) {
             name: 'tree-sitter-ini',
             git: {
                 repo: 'https://github.com/justinmk/tree-sitter-ini',
-                sha: '962568c9efa71d25720ab42c5d36e222626ef3a6'
+                sha: 'f0285fe577ad298ad79f8633e643ad60646e3027'
             }
         },
         {
@@ -39,10 +47,14 @@ async function compileGrammarWasm(outputPath: string) {
             name: 'tree-sitter-javascript', // Also includes jsx support
         },
         {
+            name: 'tree-sitter-php',
+            projectPath: 'tree-sitter-php/php', // non-standard path
+        },
+        {
             name: 'tree-sitter-powershell',
             git: {
                 repo: 'https://github.com/airbus-cert/tree-sitter-powershell',
-                sha: 'ebe2ab2f642eda2072c68c8de02e83973c26f33c'
+                sha: '9379c77984af1f3d3d7e3cc5e897de3496725280'
             }
         },
         {
@@ -56,6 +68,10 @@ async function compileGrammarWasm(outputPath: string) {
         },
         {
             name: 'tree-sitter-rust',
+            git: {
+                repo: 'https://github.com/tree-sitter/tree-sitter-rust',
+                sha: '261b20226c04ef601adbdf185a800512a5f66291'
+            }
         },
         {
             name: 'tree-sitter-tsx',
@@ -64,10 +80,6 @@ async function compileGrammarWasm(outputPath: string) {
         {
             name: 'tree-sitter-typescript',
             projectPath: 'tree-sitter-typescript/typescript', // non-standard path
-        },
-        {
-            name: 'tree-sitter-php',
-            projectPath: 'tree-sitter-php/php', // non-standard path
         }
     ];
 
@@ -78,7 +90,7 @@ async function compileGrammarWasm(outputPath: string) {
 
 
 function compileTreeSitterWasm(clonePath: string, outputPath: string) {
-    const tag = 'v0.25.2';
+    const tag = 'v0.25.10';
     const repo = 'https://github.com/tree-sitter/tree-sitter';
     ensureTreeSitterWasm(repo, tag, clonePath, outputPath);
 }

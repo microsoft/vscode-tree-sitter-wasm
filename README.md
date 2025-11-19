@@ -20,7 +20,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 > Note: If you're using Windows, you'll need to use WSL. Ensure Docker integration for WSL is enabled before attempting to build. Without this integration, the build process may encounter errors.
 
-First, install all of the dependencies using `npm install`. You will also need to install [emscripten](https://emscripten.org/docs/getting_started/downloads.html). 
+First, install all of the dependencies using `npm install`, use the `--force` flag if needed. You will also need to install [emscripten](https://emscripten.org/docs/getting_started/downloads.html). 
 
 Then, build the the wasm files using `npm run build-wasm`, which will do the following:
 - Clone the tree-sitter repository
