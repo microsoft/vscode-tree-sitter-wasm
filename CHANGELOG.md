@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+= Adopt Tree-Sitter 0.25.10, up from 0.25.2
+- Update all grammars to latest versions
+
 ## 0.2.0
 
 - Add bash
