@@ -5,6 +5,6 @@
   - If the version of Tree-Sitter itself has changed, update at least the minor version. 
   - Otherwise, update the patch version.
 
-2. Update the `changelog.md`. 
+2. Update the `CHANGELOG.md`. 
 
 3. Run the [pipeline](https://dev.azure.com/monacotools/Monaco/_build?definitionId=585) with the "Publish tree-sitter-wasm" option.
