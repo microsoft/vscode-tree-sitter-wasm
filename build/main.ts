@@ -37,7 +37,7 @@ async function compileGrammarWasm(outputPath: string) {
             name: 'tree-sitter-ini',
             git: {
                 repo: 'https://github.com/justinmk/tree-sitter-ini',
-                sha: '0eaed8040513e62ee2e9e8db9f086cf630a524eb'
+                sha: 'f0285fe577ad298ad79f8633e643ad60646e3027'
             }
         },
         {
