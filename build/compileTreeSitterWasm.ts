@@ -15,8 +15,15 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     // Remove ureq as it pulls in a non-standard crypto library
     patch(clonePath, repoSubpath, '../patches/remove-ureq-xtask.patch');
 
-    console.log('Updating wasmtime');
-    child_process.execSync('cargo update -p wasmtime', {
+    console.log('Updating bytes');
+    child_process.execSync('cargo update -p bytes --precise 1.11.1', {
+        cwd: treeSitterRepoPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
+    console.log('Updating git2');
+    child_process.execSync('cargo update -p git2 --precise 0.20.4', {
         cwd: treeSitterRepoPath,
         stdio: 'inherit',
         encoding: 'utf-8'
