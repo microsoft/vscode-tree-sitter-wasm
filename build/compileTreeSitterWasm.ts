@@ -90,8 +90,8 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     // Make it UMD.
     jsFileContents = `(function (global, factory) {
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-		typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-			(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Parser = {}));
+		typeof exports === 'object' && typeof module !== 'undefined' ? (module.exports = factory()) :
+			(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Parser = factory());
 })(this, (function () {
 
     // Helper to replace import.meta.url
