@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Fix issue with UMD wrapper in CJS contexts
+
 ## 0.3.0
 
 = Adopt Tree-Sitter 0.25.10, up from 0.25.2
