@@ -29,6 +29,13 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
         encoding: 'utf-8'
     });
 
+    console.log('Updating rand');
+    child_process.execSync('cargo update -p rand --precise 0.8.6', {
+        cwd: treeSitterRepoPath,
+        stdio: 'inherit',
+        encoding: 'utf-8'
+    });
+
     const builtWasmPath = path.join(treeSitterRepoPath, 'lib/binding_web');
 
     console.log('Installing dependencies');
