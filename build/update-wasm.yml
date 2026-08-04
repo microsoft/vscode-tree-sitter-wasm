@@ -27,6 +27,7 @@ extends:
   parameters:
     npmPackages:
       - name: tree-sitter-wasm
+        rustTargets: x86_64-unknown-linux-gnu
 
         buildSteps:
           - script: ./build/setup-emsdk.sh
