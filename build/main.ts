@@ -31,6 +31,20 @@ async function compileGrammarWasm(outputPath: string) {
             }
         },
         {
+            name: 'tree-sitter-delphi13',
+            git: {
+                repo: 'https://github.com/Alexl-git/tree-sitter-delphi13',
+                sha: 'a820b9ba045a6df48e83cc72139043096142e97c'
+            }
+        },
+        {
+            name: 'tree-sitter-dfm',
+            git: {
+                repo: 'https://github.com/Alexl-git/tree-sitter-dfm',
+                sha: '3ef478383fdef4163ab60e06c7dceb4ac28187d4'
+            }
+        },
+        {
             name: 'tree-sitter-go',
         },
         {
