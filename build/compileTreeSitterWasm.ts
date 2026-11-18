@@ -46,7 +46,7 @@ export function ensureTreeSitterWasm(repo: string, tag: string, clonePath: strin
     });
 
     console.log('Updating brace-expansion');
-    child_process.execSync('npm update brace-expansion', {
+    child_process.execSync('npm update brace-expansion@2.1.7', {
         cwd: builtWasmPath,
         stdio: 'inherit',
         encoding: 'utf-8'
